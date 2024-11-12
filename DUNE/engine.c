@@ -12,6 +12,11 @@ void cursor_move(DIRECTION dir);
 void sample_obj_move(void);
 POSITION sample_obj_next_position(void);
 
+DWORD getMilliseconds(SYSTEMTIME time) {
+	return (DWORD)(time.wSecond * 1000 + time.wMilliseconds);
+}
+
+
 
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
@@ -20,6 +25,7 @@ CURSOR cursor = { { 1, 1 }, {1, 1} };
 
 /* ================= game data =================== */
 char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH] = { 0 };
+char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
 
 RESOURCE resource = { 
 	.spice = 0,
@@ -184,12 +190,15 @@ void Construction(void) {
 
 /* ================= main() =================== */
 int main(void) {
+	SYSTEMTIME tVal1, tVal2;		// 키보드가 입력된 시간 확인
+	DWORD time_gap;					// 두 키보드 입력간 시간 차
+	int PreKey = 0;					// 앞에서 입력받은 방향키
 	srand((unsigned int)time(NULL));
 
 	init();
 	//intro();
 	Construction();
-	display(resource, map, cursor);
+	display(resource, map, cursor, sys_array);
 
 	while (1) {
 		// loop 돌 때마다(즉, TICK==10ms마다) 키 입력 확인
@@ -197,7 +206,17 @@ int main(void) {
 
 		// 키 입력이 있으면 처리
 		if (is_arrow_key(key)) {
+			GetSystemTime(&tVal2);	// 방향키가 눌린 시점 시간
 			cursor_move(ktod(key));
+			if (PreKey != 0 && PreKey == key) {
+				time_gap = getMilliseconds(tVal2) - getMilliseconds(tVal1);	// 방향키가 눌린 시간 차 구하기
+				if (time_gap < DOUBLE_CLICK_GAP) {
+					cursor_move(ktod(key));					// 커서 1번 더 이동
+					cursor_move(ktod(key));					// 커서 1번 더 이동
+				}
+			}
+			GetSystemTime(&tVal1);	// 현 시점 시간을 저장
+			PreKey = key;			// 방향키값 저장
 		}
 		else {
 			// 방향키 외의 입력
@@ -213,7 +232,7 @@ int main(void) {
 		sample_obj_move();
 
 		// 화면 출력
-		display(resource, map, cursor);
+		display(resource, map, cursor, sys_array);
 		Sleep(TICK);
 		sys_clock += 10;
 	}
@@ -227,6 +246,7 @@ void intro(void) {
 }
 
 void outro(void) {
+	system("cls");
 	printf("exiting...\n");
 	exit(0);
 }
@@ -250,6 +270,23 @@ void init(void) {
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
 			map[1][i][j] = -1;
+		}
+	}
+
+	// 시스템 메시지 창
+	for (int j = 0; j < SYS_MAP_WIDTH; j++) {
+		sys_array[0][j] = '#';  // 첫 번째 행 (상단 경계)
+		sys_array[SYS_MAP_HEIGHT - 1][j] = '#';  // 마지막 행 (하단 경계)
+	}
+
+	// 좌측과 우측 경계
+	for (int i = 1; i < SYS_MAP_HEIGHT - 1; i++) {
+		sys_array[i][0] = '#';  // 첫 번째 열 (좌측 경계)
+		sys_array[i][SYS_MAP_WIDTH - 1] = '#';  // 마지막 열 (우측 경계)
+
+		// 내부는 공백으로 채우기
+		for (int j = 1; j < SYS_MAP_WIDTH - 1; j++) {
+			sys_array[i][j] = ' ';  // 내부 부분
 		}
 	}
 

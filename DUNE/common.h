@@ -9,10 +9,13 @@
 
 /* ================= system parameters =================== */
 #define TICK 10		// time unit(ms)
+#define DOUBLE_CLICK_GAP	300
 
 #define N_LAYER 2
 #define MAP_WIDTH	60
 #define MAP_HEIGHT	18
+#define SYS_MAP_WIDTH	30
+#define SYS_MAP_HEIGHT	18
 
 
 /* ================= 위치와 방향 =================== */

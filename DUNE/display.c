@@ -12,25 +12,28 @@
 const POSITION resource_pos = { 0, 0 };
 const POSITION map_pos = { 1, 0 };
 
-
 char backbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
 char frontbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
+char back[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
+char front[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
 
 void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP_WIDTH]);
 void display_resource(RESOURCE resource);
 void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]);
 void display_cursor(CURSOR cursor);
+void display_sys_message(sys_array);
 
 
 void display(
 	RESOURCE resource,
 	char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH], 
-	CURSOR cursor)
+	CURSOR cursor,
+	char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH])
 {
 	display_resource(resource);
 	display_map(map);
 	display_cursor(cursor);
-	// display_system_message()
+	display_sys_message(sys_array);
 	// display_object_info()
 	// display_commands()
 	// ...
@@ -92,15 +95,11 @@ void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP
 	}
 }
 
-void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH], CURSOR cursor) {
+void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 	project(map, backbuf);
 
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
-
-			if (i == cursor.current.row && j == cursor.current.column) {
-				continue;
-			}
 
 			if (frontbuf[i][j] != backbuf[i][j]) {
 
@@ -152,5 +151,24 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH], CURSOR cursor) {
 	}
 }
 
+void project_sys_message(char src[SYS_MAP_HEIGHT][SYS_MAP_WIDTH], char dest[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
+	for (int i = 0; i < SYS_MAP_HEIGHT; i++) {
+		for (int j = 0; j < SYS_MAP_WIDTH; j++) {
+			dest[i][j] = src[i][j];
+		}
+	}
+}
+void display_sys_message(char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
+	project_sys_message(sys_array, back);
 
+	for (int i = 0; i < SYS_MAP_HEIGHT; i++) {
+		for (int j = 0; j < SYS_MAP_WIDTH; j++) {
+			if (front[i][j] != back[i][j]) {
+				POSITION pos = { 1 + i, 61 + j };
+				printc(pos, back[i][j], COLOR_DEFAULT);
+			}
+			front[i][j] = back[i][j];
+		}
+	}
+}
 
