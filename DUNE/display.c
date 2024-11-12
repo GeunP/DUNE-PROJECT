@@ -51,10 +51,32 @@ void display_cursor(CURSOR cursor) {
 	POSITION curr = cursor.current;
 
 	char ch = frontbuf[prev.row][prev.column];
-	printc(padd(map_pos, prev), ch, COLOR_DEFAULT + 220);
+	if (ch == 'B' || ch == 'H') {
+		if (prev.column < MAP_WIDTH / 2) {
+			printc(padd(map_pos, prev), ch, 79);
+		}
+		else {
+			printc(padd(map_pos, prev), ch, 23);
+		}
+	}
+	else if (ch == 'P') {
+		printc(padd(map_pos, prev), ch, 7);
+	}
+	else if (ch == '5') {
+		printc(padd(map_pos, prev), ch, 71);
+	}
+	else if (ch == 'R') {
+		printc(padd(map_pos, prev), ch, 135);
+	}
+	else if (ch == 'W') {
+		printc(padd(map_pos, prev), ch, 103);
+	}
+	else {
+		printc(padd(map_pos, prev), ch, COLOR_CURSOR);
+	}
 
 	ch = frontbuf[curr.row][curr.column];
-	printc(padd(map_pos, curr), ch, COLOR_CURSOR + 220);
+	printc(padd(map_pos, curr), ch, COLOR_CURSOR);
 }
 
 // subfunction of draw_map()
@@ -70,11 +92,16 @@ void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP
 	}
 }
 
-void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
+void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH], CURSOR cursor) {
 	project(map, backbuf);
 
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
+
+			if (i == cursor.current.row && j == cursor.current.column) {
+				continue;
+			}
+
 			if (frontbuf[i][j] != backbuf[i][j]) {
 
 				if (backbuf[i][j] == ' ') {
