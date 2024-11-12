@@ -11,12 +11,12 @@ void outro(void);
 void cursor_move(DIRECTION dir);
 void sample_obj_move(void);
 POSITION sample_obj_next_position(void);
+POSITION current_space_pos = { 0, 0 };
+void press_space(POSITION pos);
 
 DWORD getMilliseconds(SYSTEMTIME time) {
 	return (DWORD)(time.wSecond * 1000 + time.wMilliseconds);
 }
-
-
 
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
@@ -221,6 +221,10 @@ int main(void) {
 		else {
 			// 방향키 외의 입력
 			switch (key) {
+			case k_space: 
+				current_space_pos = cursor.current;
+				press_space(current_space_pos);
+				break;
 			case k_quit: outro();
 			case k_none:
 			case k_undef:
@@ -364,4 +368,10 @@ void sample_obj_move(void) {
 	map[1][obj.pos.row][obj.pos.column] = obj.repr;
 
 	obj.next_move_time = sys_clock + obj.move_period;
+}
+
+void press_space(POSITION pos) {
+	POSITION prt = { 3, 63 };
+	gotoxy(prt);
+	printf("%d, %d", pos.row, pos.column);
 }
