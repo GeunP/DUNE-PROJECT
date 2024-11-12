@@ -16,6 +16,12 @@
 
 
 /* ================= 위치와 방향 =================== */
+
+// 맵에서 위치를 나타내는 구조체
+typedef struct {
+	int row, column;
+} POSITION;
+
 typedef struct {
 	POSITION pos1;	// 건물 크기 1
 	POSITION pos2;	// 건물 크기 2
@@ -24,11 +30,6 @@ typedef struct {
 	char repr;		// 건물 이름
 	int layer;		// 위치할 레이어 (사용해도 되고 안해도됨)
 } OBJECT_CON;
-
-// 맵에서 위치를 나타내는 구조체
-typedef struct {
-	int row, column;
-} POSITION;
 
 // 커서 위치
 typedef struct {
