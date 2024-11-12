@@ -45,6 +45,18 @@ void display_resource(RESOURCE resource) {
 	);
 }
 
+// frontbuf[][]에서 커서 위치의 문자를 색만 바꿔서 그대로 다시 출력
+void display_cursor(CURSOR cursor) {
+	POSITION prev = cursor.previous;
+	POSITION curr = cursor.current;
+
+	char ch = frontbuf[prev.row][prev.column];
+	printc(padd(map_pos, prev), ch, COLOR_DEFAULT + 220);
+
+	ch = frontbuf[curr.row][curr.column];
+	printc(padd(map_pos, curr), ch, COLOR_CURSOR + 220);
+}
+
 // subfunction of draw_map()
 void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP_WIDTH]) {
 	for (int i = 0; i < MAP_HEIGHT; i++) {
@@ -72,36 +84,36 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 				else if (backbuf[i][j] == 'B') {
 					POSITION pos = { i, j };
 					if (j <= MAP_WIDTH / 2) {
-						printc(padd(map_pos, pos), backbuf[i][j], 16);
+						printc(padd(map_pos, pos), backbuf[i][j], 79);
 					}
 					else {
-						printc(padd(map_pos, pos), backbuf[i][j], 64);
+						printc(padd(map_pos, pos), backbuf[i][j], 23);
 					}
 				}
 				else if (backbuf[i][j] == 'H') {
 					POSITION pos = { i, j };
 					if (j <= MAP_WIDTH / 2) {
-						printc(padd(map_pos, pos), backbuf[i][j], 16);
+						printc(padd(map_pos, pos), backbuf[i][j], 79);
 					}
 					else {
-						printc(padd(map_pos, pos), backbuf[i][j], 64);
+						printc(padd(map_pos, pos), backbuf[i][j], 23);
 					}
 				}
 				else if (backbuf[i][j] == 'P') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 0);
+					printc(padd(map_pos, pos), backbuf[i][j], 7);
 				}
 				else if (backbuf[i][j] == '5') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 96 + 128);
+					printc(padd(map_pos, pos), backbuf[i][j], 71);
 				}
 				else if (backbuf[i][j] == 'R') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 128);
+					printc(padd(map_pos, pos), backbuf[i][j], 135);
 				}
 				else if (backbuf[i][j] == 'W') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 96);
+					printc(padd(map_pos, pos), backbuf[i][j], 103);
 				}
 				else {
 					POSITION pos = { i, j };
@@ -113,15 +125,5 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 	}
 }
 
-// frontbuf[][]에서 커서 위치의 문자를 색만 바꿔서 그대로 다시 출력
-void display_cursor(CURSOR cursor) {
-	POSITION prev = cursor.previous;
-	POSITION curr = cursor.current;
 
-	char ch = frontbuf[prev.row][prev.column];
-	printc(padd(map_pos, prev), ch, COLOR_DEFAULT + 220);
-
-	ch = frontbuf[curr.row][curr.column];
-	printc(padd(map_pos, curr), ch, COLOR_CURSOR + 220);
-}
 
