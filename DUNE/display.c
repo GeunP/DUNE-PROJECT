@@ -64,8 +64,49 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
 			if (frontbuf[i][j] != backbuf[i][j]) {
-				POSITION pos = {i, j };
-				printc(padd(map_pos, pos), backbuf[i][j], COLOR_DEFAULT);
+
+				if (backbuf[i][j] == ' ') {
+					POSITION pos = { i, j };
+					printc(padd(map_pos, pos), backbuf[i][j], COLOR_DEFAULT + 220);
+				}
+				else if (backbuf[i][j] == 'B') {
+					POSITION pos = { i, j };
+					if (j <= MAP_WIDTH / 2) {
+						printc(padd(map_pos, pos), backbuf[i][j], 16);
+					}
+					else {
+						printc(padd(map_pos, pos), backbuf[i][j], 64);
+					}
+				}
+				else if (backbuf[i][j] == 'H') {
+					POSITION pos = { i, j };
+					if (j <= MAP_WIDTH / 2) {
+						printc(padd(map_pos, pos), backbuf[i][j], 16);
+					}
+					else {
+						printc(padd(map_pos, pos), backbuf[i][j], 64);
+					}
+				}
+				else if (backbuf[i][j] == 'P') {
+					POSITION pos = { i, j };
+					printc(padd(map_pos, pos), backbuf[i][j], 0);
+				}
+				else if (backbuf[i][j] == '5') {
+					POSITION pos = { i, j };
+					printc(padd(map_pos, pos), backbuf[i][j], 96 + 128);
+				}
+				else if (backbuf[i][j] == 'R') {
+					POSITION pos = { i, j };
+					printc(padd(map_pos, pos), backbuf[i][j], 128);
+				}
+				else if (backbuf[i][j] == 'W') {
+					POSITION pos = { i, j };
+					printc(padd(map_pos, pos), backbuf[i][j], 96);
+				}
+				else {
+					POSITION pos = { i, j };
+					printc(padd(map_pos, pos), backbuf[i][j], COLOR_DEFAULT);
+				}
 			}
 			frontbuf[i][j] = backbuf[i][j];
 		}
@@ -78,8 +119,9 @@ void display_cursor(CURSOR cursor) {
 	POSITION curr = cursor.current;
 
 	char ch = frontbuf[prev.row][prev.column];
-	printc(padd(map_pos, prev), ch, COLOR_DEFAULT);
+	printc(padd(map_pos, prev), ch, COLOR_DEFAULT + 220);
 
 	ch = frontbuf[curr.row][curr.column];
-	printc(padd(map_pos, curr), ch, COLOR_CURSOR);
+	printc(padd(map_pos, curr), ch, COLOR_CURSOR + 220);
 }
+
