@@ -36,12 +36,159 @@ OBJECT_SAMPLE obj = {
 	.next_move_time = 300
 };
 
+OBJECT_CON Atreides_base = {
+	.pos1 = {MAP_HEIGHT - 3, MAP_WIDTH - (MAP_WIDTH - 1)},
+	.pos2 = {MAP_HEIGHT - 3, MAP_WIDTH - (MAP_WIDTH - 2)},
+	.pos3 = {MAP_HEIGHT - 2, MAP_WIDTH - (MAP_WIDTH - 1)},
+	.pos4 = {MAP_HEIGHT - 2, MAP_WIDTH - (MAP_WIDTH - 2)},
+	.layer = 0,
+	.repr = 'B'
+};
+
+OBJECT_CON A_plate = {
+	.pos1 = {MAP_HEIGHT - 3, MAP_WIDTH - (MAP_WIDTH - 3)},
+	.pos2 = {MAP_HEIGHT - 3, MAP_WIDTH - (MAP_WIDTH - 4)},
+	.pos3 = {MAP_HEIGHT - 2, MAP_WIDTH - (MAP_WIDTH - 3)},
+	.pos4 = {MAP_HEIGHT - 2, MAP_WIDTH - (MAP_WIDTH - 4)},
+	.layer = 0,
+	.repr = 'P'
+};
+
+OBJECT_CON A_Harvester = {
+	.pos1 = {MAP_HEIGHT - 4, MAP_WIDTH - (MAP_WIDTH - 1)},
+	.layer = 1,
+	.repr = 'H'
+};
+
+OBJECT_CON Harkonnen_base = {
+	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 1), MAP_WIDTH - 3},
+	.pos2 = {MAP_HEIGHT - (MAP_HEIGHT - 1), MAP_WIDTH - 2},
+	.pos3 = {MAP_HEIGHT - (MAP_HEIGHT - 2), MAP_WIDTH - 3},
+	.pos4 = {MAP_HEIGHT - (MAP_HEIGHT - 2), MAP_WIDTH - 2},
+	.layer = 0,
+	.repr = 'B'
+};
+
+OBJECT_CON H_plate = {
+	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 1), MAP_WIDTH - 5},
+	.pos2 = {MAP_HEIGHT - (MAP_HEIGHT - 1), MAP_WIDTH - 4},
+	.pos3 = {MAP_HEIGHT - (MAP_HEIGHT - 2), MAP_WIDTH - 5},
+	.pos4 = {MAP_HEIGHT - (MAP_HEIGHT - 2), MAP_WIDTH - 4},
+	.layer = 0,
+	.repr = 'P'
+};
+
+OBJECT_CON H_Harvester = {
+	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 3), MAP_WIDTH - 2},
+	.layer = 1,
+	.repr = 'H'
+};
+
+OBJECT_CON spice = {
+	.pos1 = {MAP_HEIGHT - 8, MAP_WIDTH - (MAP_WIDTH - 1)},
+	.pos2 = {MAP_HEIGHT - (MAP_HEIGHT - 8), MAP_WIDTH - 2},
+	.layer = 0,
+	.repr = '5'
+};
+
+OBJECT_CON small_rock = {
+	.pos1 = {MAP_HEIGHT - 10, MAP_WIDTH - (MAP_WIDTH - 16)},
+	.pos2 = {MAP_HEIGHT - (MAP_HEIGHT - 6), MAP_WIDTH - 19},
+	.pos3 = {MAP_HEIGHT - 4, MAP_WIDTH - 16},
+	.layer = 0,
+	.repr = 'R'
+};
+
+OBJECT_CON big_rock1 = {
+	.pos1 = {MAP_HEIGHT - 5, MAP_WIDTH - 29},
+	.pos2 = {MAP_HEIGHT - 5, MAP_WIDTH - 30},
+	.pos3 = {MAP_HEIGHT - 6, MAP_WIDTH - 29},
+	.pos4 = {MAP_HEIGHT - 6, MAP_WIDTH - 30},
+	.layer = 0,
+	.repr = 'R'
+};
+
+OBJECT_CON big_rock2 = {
+	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 4), MAP_WIDTH - (MAP_WIDTH - 18)},
+	.pos2 = {MAP_HEIGHT - (MAP_HEIGHT - 4), MAP_WIDTH - (MAP_WIDTH - 19)},
+	.pos3 = {MAP_HEIGHT - (MAP_HEIGHT - 5), MAP_WIDTH - (MAP_WIDTH - 18)},
+	.pos4 = {MAP_HEIGHT - (MAP_HEIGHT - 5), MAP_WIDTH - (MAP_WIDTH - 19)},
+	.layer = 0,
+	.repr = 'R'
+};
+
+OBJECT_CON sand_warms = {
+	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 3), MAP_WIDTH - (MAP_WIDTH - 11)},
+	.pos2 = {MAP_HEIGHT - 8, MAP_WIDTH - (MAP_WIDTH - 39)},
+	.layer = 1,
+	.repr = 'W'
+};
+
+
+void Construction(void) {
+	//아트레이데스 베이스
+	map[Atreides_base.layer][Atreides_base.pos1.row][Atreides_base.pos1.column] = Atreides_base.repr;
+	map[Atreides_base.layer][Atreides_base.pos2.row][Atreides_base.pos2.column] = Atreides_base.repr;
+	map[Atreides_base.layer][Atreides_base.pos3.row][Atreides_base.pos3.column] = Atreides_base.repr;
+	map[Atreides_base.layer][Atreides_base.pos4.row][Atreides_base.pos4.column] = Atreides_base.repr;
+
+	//하코넨 베이스
+	map[Harkonnen_base.layer][Harkonnen_base.pos1.row][Harkonnen_base.pos1.column] = Harkonnen_base.repr;
+	map[Harkonnen_base.layer][Harkonnen_base.pos2.row][Harkonnen_base.pos2.column] = Harkonnen_base.repr;
+	map[Harkonnen_base.layer][Harkonnen_base.pos3.row][Harkonnen_base.pos3.column] = Harkonnen_base.repr;
+	map[Harkonnen_base.layer][Harkonnen_base.pos4.row][Harkonnen_base.pos4.column] = Harkonnen_base.repr;
+
+	//아트레이데스 장판
+	map[A_plate.layer][A_plate.pos1.row][A_plate.pos1.column] = A_plate.repr;
+	map[A_plate.layer][A_plate.pos2.row][A_plate.pos2.column] = A_plate.repr;
+	map[A_plate.layer][A_plate.pos3.row][A_plate.pos3.column] = A_plate.repr;
+	map[A_plate.layer][A_plate.pos4.row][A_plate.pos4.column] = A_plate.repr;
+
+	//하코넨 장판
+	map[H_plate.layer][H_plate.pos1.row][H_plate.pos1.column] = H_plate.repr;
+	map[H_plate.layer][H_plate.pos2.row][H_plate.pos2.column] = H_plate.repr;
+	map[H_plate.layer][H_plate.pos3.row][H_plate.pos3.column] = H_plate.repr;
+	map[H_plate.layer][H_plate.pos4.row][H_plate.pos4.column] = H_plate.repr;
+
+	//아트레이데스 하베스터 위치
+	map[A_Harvester.layer][A_Harvester.pos1.row][A_Harvester.pos1.column] = A_Harvester.repr;
+
+	//하코넨 하베스터 위치
+	map[H_Harvester.layer][H_Harvester.pos1.row][H_Harvester.pos1.column] = H_Harvester.repr;
+
+	//스파이스 위치
+	map[spice.layer][spice.pos1.row][spice.pos1.column] = spice.repr;
+	map[spice.layer][spice.pos2.row][spice.pos2.column] = spice.repr;
+
+	//작은 돌 위치
+	map[small_rock.layer][small_rock.pos1.row][small_rock.pos1.column] = small_rock.repr;
+	map[small_rock.layer][small_rock.pos2.row][small_rock.pos2.column] = small_rock.repr;
+	map[small_rock.layer][small_rock.pos3.row][small_rock.pos3.column] = small_rock.repr;
+
+	//큰 돌1 위치
+	map[big_rock1.layer][big_rock1.pos1.row][big_rock1.pos1.column] = big_rock1.repr;
+	map[big_rock1.layer][big_rock1.pos2.row][big_rock1.pos2.column] = big_rock1.repr;
+	map[big_rock1.layer][big_rock1.pos3.row][big_rock1.pos3.column] = big_rock1.repr;
+	map[big_rock1.layer][big_rock1.pos4.row][big_rock1.pos4.column] = big_rock1.repr;
+
+	//큰 돌2 위치
+	map[big_rock2.layer][big_rock2.pos1.row][big_rock2.pos1.column] = big_rock2.repr;
+	map[big_rock2.layer][big_rock2.pos2.row][big_rock2.pos2.column] = big_rock2.repr;
+	map[big_rock2.layer][big_rock2.pos3.row][big_rock2.pos3.column] = big_rock2.repr;
+	map[big_rock2.layer][big_rock2.pos4.row][big_rock2.pos4.column] = big_rock2.repr;
+
+	//샌드웜 위치
+	map[sand_warms.layer][sand_warms.pos1.row][sand_warms.pos1.column] = sand_warms.repr;
+	map[sand_warms.layer][sand_warms.pos2.row][sand_warms.pos2.column] = sand_warms.repr;
+}
+
 /* ================= main() =================== */
 int main(void) {
 	srand((unsigned int)time(NULL));
 
 	init();
-	intro();
+	//intro();
+	Construction();
 	display(resource, map, cursor);
 
 	while (1) {
