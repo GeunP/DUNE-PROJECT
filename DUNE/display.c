@@ -53,34 +53,16 @@ void display_cursor(CURSOR cursor) {
 	POSITION prev = cursor.previous;
 	POSITION curr = cursor.current;
 
+	// 이전 위치의 문자를 원래 색상으로 복원
 	char ch = frontbuf[prev.row][prev.column];
-	if (ch == 'B' || ch == 'H') {
-		if (prev.column < MAP_WIDTH / 2) {
-			printc(padd(map_pos, prev), ch, 79);
-		}
-		else {
-			printc(padd(map_pos, prev), ch, 23);
-		}
-	}
-	else if (ch == 'P') {
-		printc(padd(map_pos, prev), ch, 7);
-	}
-	else if (ch == '5') {
-		printc(padd(map_pos, prev), ch, 71);
-	}
-	else if (ch == 'R') {
-		printc(padd(map_pos, prev), ch, 135);
-	}
-	else if (ch == 'W') {
-		printc(padd(map_pos, prev), ch, 103);
-	}
-	else {
-		printc(padd(map_pos, prev), ch, COLOR_CURSOR);
-	}
+	int color = get_color_for_char(ch);
+	printc(padd(map_pos, prev), ch, color);
 
+	// 현재 위치의 문자를 커서 색상으로 출력
 	ch = frontbuf[curr.row][curr.column];
 	printc(padd(map_pos, curr), ch, COLOR_CURSOR);
 }
+
 
 // subfunction of draw_map()
 void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP_WIDTH]) {
@@ -158,6 +140,7 @@ void project_sys_message(char src[SYS_MAP_HEIGHT][SYS_MAP_WIDTH], char dest[SYS_
 		}
 	}
 }
+
 void display_sys_message(char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
 	project_sys_message(sys_array, back);
 
@@ -172,3 +155,15 @@ void display_sys_message(char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
 	}
 }
 
+int get_color_for_char(char ch) {
+	switch (ch) {
+	case 'B': return 79;   // Atreides Base
+	case 'H': return 23;   // Harkonnen Base
+	case 'P': return 7;    // Plate
+	case '5': return 71;   // Spice Field
+	case 'R': return 135;  // Rock
+	case 'W': return 103;  // Sand Worm
+	case ' ': return COLOR_DEFAULT + 220;  // 빈 공간
+	default: return COLOR_DEFAULT;  // 기타 문자
+	}
+}

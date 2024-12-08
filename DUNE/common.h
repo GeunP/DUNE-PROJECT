@@ -14,9 +14,8 @@
 #define N_LAYER 2
 #define MAP_WIDTH	60
 #define MAP_HEIGHT	18
-#define SYS_MAP_WIDTH	30
+#define SYS_MAP_WIDTH	40
 #define SYS_MAP_HEIGHT	18
-
 
 /* ================= 위치와 방향 =================== */
 
@@ -103,5 +102,8 @@ typedef struct {
 	int move_period;	// '몇 ms마다 한 칸 움직이는지'를 뜻함
 	int next_move_time;	// 다음에 움직일 시간
 } OBJECT_SAMPLE;
+
+extern const POSITION map_pos;  // 맵의 기준 위치 선언
+
 
 #endif

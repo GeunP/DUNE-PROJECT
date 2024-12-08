@@ -196,7 +196,7 @@ int main(void) {
 	srand((unsigned int)time(NULL));
 
 	init();
-	//intro();
+	intro();
 	Construction();
 	display(resource, map, cursor, sys_array);
 
@@ -211,8 +211,9 @@ int main(void) {
 			if (PreKey != 0 && PreKey == key) {
 				time_gap = getMilliseconds(tVal2) - getMilliseconds(tVal1);	// 방향키가 눌린 시간 차 구하기
 				if (time_gap < DOUBLE_CLICK_GAP) {
-					cursor_move(ktod(key));					// 커서 1번 더 이동
-					cursor_move(ktod(key));					// 커서 1번 더 이동
+					for (int i = 0; i < 3; i++) {
+						cursor_move(ktod(key));
+					}
 				}
 			}
 			GetSystemTime(&tVal1);	// 현 시점 시간을 저장
@@ -303,14 +304,20 @@ void cursor_move(DIRECTION dir) {
 	POSITION curr = cursor.current;
 	POSITION new_pos = pmove(curr, dir);
 
-	// validation check
+	// 새 위치가 유효한 경우에만 이동
 	if (1 <= new_pos.row && new_pos.row <= MAP_HEIGHT - 2 && \
 		1 <= new_pos.column && new_pos.column <= MAP_WIDTH - 2) {
 
-		cursor.previous = cursor.current;
-		cursor.current = new_pos;
+		cursor.previous = cursor.current;  // 이전 위치 저장
+		cursor.current = new_pos;          // 현재 위치 갱신
+
+		// 이전 위치 복원
+		char original_char = map[0][cursor.previous.row][cursor.previous.column];
+		int color = get_color_for_char(original_char);  // 문자에 맞는 색상 가져오기
+		printc(padd(map_pos, cursor.previous), original_char, color);
 	}
 }
+
 
 /* ================= sample object movement =================== */
 POSITION sample_obj_next_position(void) {
@@ -371,7 +378,7 @@ void sample_obj_move(void) {
 }
 
 void press_space(POSITION pos) {
-	POSITION prt = { 3, 63 };
+	POSITION prt = { 3,64 };
 	gotoxy(prt);
-	printf("%d, %d", pos.row, pos.column);
+	printf("%d,%d", pos.row, pos.column);
 }

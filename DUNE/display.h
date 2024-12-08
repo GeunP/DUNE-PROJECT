@@ -24,4 +24,7 @@ void display(
 	char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]
 );
 
+int get_color_for_char(char ch);  // 문자에 따른 색상 반환 함수 선언
+
+
 #endif
