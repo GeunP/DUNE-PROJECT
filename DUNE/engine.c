@@ -301,21 +301,21 @@ void init(void) {
 
 // (가능하다면) 지정한 방향으로 커서 이동
 void cursor_move(DIRECTION dir) {
-	POSITION curr = cursor.current;
-	POSITION new_pos = pmove(curr, dir);
+    POSITION curr = cursor.current;
+    POSITION new_pos = pmove(curr, dir);
 
-	// 새 위치가 유효한 경우에만 이동
-	if (1 <= new_pos.row && new_pos.row <= MAP_HEIGHT - 2 && \
-		1 <= new_pos.column && new_pos.column <= MAP_WIDTH - 2) {
+    // 새 위치가 유효한 경우에만 이동
+    if (1 <= new_pos.row && new_pos.row <= MAP_HEIGHT - 2 && \
+        1 <= new_pos.column && new_pos.column <= MAP_WIDTH - 2) {
+        
+        cursor.previous = cursor.current;  // 이전 위치 저장
+        cursor.current = new_pos;          // 현재 위치 갱신
 
-		cursor.previous = cursor.current;  // 이전 위치 저장
-		cursor.current = new_pos;          // 현재 위치 갱신
-
-		// 이전 위치 복원
-		char original_char = map[0][cursor.previous.row][cursor.previous.column];
-		int color = get_color_for_char(original_char);  // 문자에 맞는 색상 가져오기
-		printc(padd(map_pos, cursor.previous), original_char, color);
-	}
+        // 이전 위치 복원
+        char original_char = map[0][cursor.previous.row][cursor.previous.column];
+        int color = get_color_for_char(original_char, cursor.previous);  // 문자에 맞는 색상 가져오기
+        printc(padd(map_pos, cursor.previous), original_char, color);
+    }
 }
 
 
@@ -377,8 +377,4 @@ void sample_obj_move(void) {
 	obj.next_move_time = sys_clock + obj.move_period;
 }
 
-void press_space(POSITION pos) {
-	POSITION prt = { 3,64 };
-	gotoxy(prt);
-	printf("%d,%d", pos.row, pos.column);
-}
+

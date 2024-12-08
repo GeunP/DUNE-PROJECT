@@ -55,7 +55,7 @@ void display_cursor(CURSOR cursor) {
 
 	// 이전 위치의 문자를 원래 색상으로 복원
 	char ch = frontbuf[prev.row][prev.column];
-	int color = get_color_for_char(ch);
+	int color = get_color_for_char(ch, prev);
 	printc(padd(map_pos, prev), ch, color);
 
 	// 현재 위치의 문자를 커서 색상으로 출력
@@ -92,19 +92,19 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 				else if (backbuf[i][j] == 'B') {
 					POSITION pos = { i, j };
 					if (j <= MAP_WIDTH / 2) {
-						printc(padd(map_pos, pos), backbuf[i][j], 79);
+						printc(padd(map_pos, pos), backbuf[i][j], 23);
 					}
 					else {
-						printc(padd(map_pos, pos), backbuf[i][j], 23);
+						printc(padd(map_pos, pos), backbuf[i][j], 79);
 					}
 				}
 				else if (backbuf[i][j] == 'H') {
 					POSITION pos = { i, j };
 					if (j <= MAP_WIDTH / 2) {
-						printc(padd(map_pos, pos), backbuf[i][j], 79);
+						printc(padd(map_pos, pos), backbuf[i][j], 23);
 					}
 					else {
-						printc(padd(map_pos, pos), backbuf[i][j], 23);
+						printc(padd(map_pos, pos), backbuf[i][j], 79);
 					}
 				}
 				else if (backbuf[i][j] == 'P') {
@@ -155,10 +155,24 @@ void display_sys_message(char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
 	}
 }
 
-int get_color_for_char(char ch) {
+int get_color_for_char(char ch, POSITION cursor_pos) {
+	// MAP_WIDTH의 반값 계산
+	int mid_column = MAP_WIDTH / 2;
+
+	// 'B'와 'H'에 대해서 색상 다르게 설정
+	if (ch == 'B' || ch == 'H') {
+		if (cursor_pos.column <= mid_column) {
+			// 왼쪽 반에서 색상 79 (예: Atreides Base)
+			return 23;  // 파란색 배경, 흰색 글자 (또는 원하는 색)
+		}
+		else {
+			// 오른쪽 반에서 색상 23 (예: Harkonnen Base)
+			return 79;  // 빨간색 배경, 흰색 글자 (또는 원하는 색)
+		}
+	}
+
+	// 나머지 문자에 대한 색상 설정
 	switch (ch) {
-	case 'B': return 79;   // Atreides Base
-	case 'H': return 23;   // Harkonnen Base
 	case 'P': return 7;    // Plate
 	case '5': return 71;   // Spice Field
 	case 'R': return 135;  // Rock
@@ -167,3 +181,4 @@ int get_color_for_char(char ch) {
 	default: return COLOR_DEFAULT;  // 기타 문자
 	}
 }
+
