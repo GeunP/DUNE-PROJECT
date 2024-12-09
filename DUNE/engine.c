@@ -342,6 +342,7 @@ void init(void) {
 	map[1][obj.pos.row][obj.pos.column] = 'o';
 }
 
+
 // (가능하다면) 지정한 방향으로 커서 이동
 void cursor_move(DIRECTION dir) {
     POSITION curr = cursor.current;
@@ -356,26 +357,67 @@ void cursor_move(DIRECTION dir) {
 
         // 이전 위치 복원
         char original_char = map[0][cursor.previous.row][cursor.previous.column];
-        int color = get_color_for_char(original_char, cursor.previous);  // 문자에 맞는 색상 가져오기
-        printc(padd(map_pos, cursor.previous), original_char, color);
+		char original_char2 = map[1][cursor.previous.row][cursor.previous.column];
+        int color = get_color_for_char(original_char, cursor.previous); // 문자에 맞는 색상 가져오기
+		int color2 = get_color_for_char(original_char2, cursor.previous);
+		printc(padd(map_pos, cursor.previous), original_char, color);
+		printc(padd(map_pos, cursor.previous), original_char2, color);
     }
 }
 
 // 스페이스바를 눌렀을 때
 void press_space(POSITION pos) {
+	POSITION prt = { 3, 64 };
 	char repr = map[0][pos.row][pos.column];
+	char repr2 = map[1][pos.row][pos.column];
 	int mid_column = MAP_WIDTH / 2;
 
 	if (repr == 'B') {
 		if (pos.column <= mid_column) {
-			Atreides_info();
+			clear_sys_message();
+			gotoxy(prt);
+			printf("아트레이데스 본진");
 		}
 		else {
-			Harkonnen_info();
+			clear_sys_message();
+			gotoxy(prt);
+			printf("하코넨 본진");
 		}
 	}
+	else if (repr2 == 'H') {
+		if (pos.column <= mid_column) {
+			clear_sys_message();
+			gotoxy(prt);
+			printf("아트레이데스 하베스터");
+		}
+		else {
+			clear_sys_message();
+			gotoxy(prt);
+			printf("하코넨 하베스터");
+		}
+	}
+	else if (repr == 'R') {
+		clear_sys_message();
+		gotoxy(prt);
+		printf("바위");
+	}
+	else if (repr == 'S') {
+		clear_sys_message();
+		gotoxy(prt);
+		printf("스파이스");
+	}
+	else if (repr == 'P') {
+		clear_sys_message();
+		gotoxy(prt);
+		printf("장판");
+	}
+	else if (repr2 == 'W') {
+		clear_sys_message();
+		gotoxy(prt);
+		printf("샌드웜");
+	}
 	else if (repr == ' ') {
-		POSITION prt = { 3, 64 };
+		clear_sys_message();
 		gotoxy(prt);
 		printf("사막 지형");
 	}
