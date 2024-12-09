@@ -361,7 +361,7 @@ void cursor_move(DIRECTION dir) {
         int color = get_color_for_char(original_char, cursor.previous); // 문자에 맞는 색상 가져오기
 		int color2 = get_color_for_char(original_char2, cursor.previous);
 		printc(padd(map_pos, cursor.previous), original_char, color);
-		printc(padd(map_pos, cursor.previous), original_char2, color);
+		printc(padd(map_pos, cursor.previous), original_char2, color2);
     }
 }
 
@@ -376,50 +376,50 @@ void press_space(POSITION pos) {
 		if (pos.column <= mid_column) {
 			clear_sys_message();
 			gotoxy(prt);
-			printf("아트레이데스 본진");
+			printf("아트레이데스 본진...");
 		}
 		else {
 			clear_sys_message();
 			gotoxy(prt);
-			printf("하코넨 본진");
+			printf("하코넨 본진...");
 		}
 	}
 	else if (repr2 == 'H') {
 		if (pos.column <= mid_column) {
 			clear_sys_message();
 			gotoxy(prt);
-			printf("아트레이데스 하베스터");
+			printf("아트레이데스 하베스터...");
 		}
 		else {
 			clear_sys_message();
 			gotoxy(prt);
-			printf("하코넨 하베스터");
+			printf("하코넨 하베스터...");
 		}
 	}
 	else if (repr == 'R') {
 		clear_sys_message();
 		gotoxy(prt);
-		printf("바위");
+		printf("바위...");
 	}
 	else if (repr == 'S') {
 		clear_sys_message();
 		gotoxy(prt);
-		printf("스파이스");
+		printf("스파이스...");
 	}
 	else if (repr == 'P') {
 		clear_sys_message();
 		gotoxy(prt);
-		printf("장판");
+		printf("장판...");
 	}
 	else if (repr2 == 'W') {
 		clear_sys_message();
 		gotoxy(prt);
-		printf("샌드웜");
+		printf("샌드웜...");
 	}
 	else if (repr == ' ') {
 		clear_sys_message();
 		gotoxy(prt);
-		printf("사막 지형");
+		printf("사막 지형...");
 	}
 }
 

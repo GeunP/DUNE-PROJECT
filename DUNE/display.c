@@ -160,7 +160,18 @@ int get_color_for_char(char ch, POSITION cursor_pos) {
 	int mid_column = MAP_WIDTH / 2;
 
 	// 'B'와 'H'에 대해서 색상 다르게 설정
-	if (ch == 'B' || ch == 'H') {
+	
+	if (ch == 'H') {
+		if (cursor_pos.column <= mid_column) {
+			return 23;
+		}
+		else {
+			return 79;
+		}
+	}
+	
+
+	if (ch == 'B') {
 		if (cursor_pos.column <= mid_column) {
 			// 왼쪽 반에서 색상 79 (예: Atreides Base)
 			return 23;  // 파란색 배경, 흰색 글자 (또는 원하는 색)
@@ -181,7 +192,7 @@ int get_color_for_char(char ch, POSITION cursor_pos) {
 	default: return COLOR_DEFAULT;  // 기타 문자
 	}
 }
-	
+
 void clear_sys_message(void) {
 	POSITION position;
 	for (int i = 2; i < SYS_MAP_HEIGHT - 2; i++) {
