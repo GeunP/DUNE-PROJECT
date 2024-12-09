@@ -14,8 +14,12 @@
 #define N_LAYER 2
 #define MAP_WIDTH	60
 #define MAP_HEIGHT	18
-#define SYS_MAP_WIDTH	40
-#define SYS_MAP_HEIGHT	18
+#define STATUS_MAP_WIDTH	40
+#define STATUS_MAP_HEIGHT	18
+#define SYS_MAP_WIDTH	60
+#define SYS_MAP_HEIGHT	10
+#define COMMAND_MAP_WIDTH	40
+#define COMMAND_MAP_HEIGHT	10
 
 /* ================= 위치와 방향 =================== */
 

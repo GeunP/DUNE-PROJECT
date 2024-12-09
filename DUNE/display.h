@@ -14,6 +14,12 @@
 #define COLOR_DEFAULT	15
 #define COLOR_CURSOR	15
 #define COLOR_RESOURCE  112
+#define COLOR_Harkonnen	79	// 하코넨 색
+#define	COLOR_Atreides	23	// 아트레이데스 색
+#define	COLOR_P			7	// Plate
+#define COLOR_SPICE		71	// Spice Field
+#define COLOR_ROCK		135	// Rock
+#define COLOR_WORM		103	// Sand Worm
 
 // 지금은 자원, 맵, 커서만 표시
 // 앞으로 화면에 표시할 내용들 여기에 추가하기
@@ -21,10 +27,12 @@ void display(
 	RESOURCE resource,
 	char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH],
 	CURSOR cursor,
-	char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]
+	char status_array[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH],
+	char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH],
+	char command_array[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH]
 );
 
 int get_color_for_char(char ch, POSITION cursor_pos);  // 문자에 따른 색상 반환 함수 선언
-void clear_sys_message();
+void clear_status();
 
 #endif

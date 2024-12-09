@@ -26,7 +26,9 @@ CURSOR cursor = { { 1, 1 }, {1, 1} };
 
 /* ================= game data =================== */
 char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH] = { 0 };
+char status_array[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH] = { 0 };
 char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
+char command_array[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH] = { 0 };
 
 RESOURCE resource = { 
 	.spice = 0,
@@ -238,7 +240,7 @@ int main(void) {
 	init();
 	intro();
 	Construction();
-	display(resource, map, cursor, sys_array);
+	display(resource, map, cursor, status_array, sys_array, command_array);
 
 	while (1) {
 		// loop 돌 때마다(즉, TICK==10ms마다) 키 입력 확인
@@ -280,7 +282,7 @@ int main(void) {
 		sample_obj_move();
 
 		// 화면 출력
-		display(resource, map, cursor, sys_array);
+		display(resource, map, cursor, status_array, sys_array, command_array);
 		Sleep(TICK);
 		sys_clock += 10;
 	}
@@ -288,14 +290,32 @@ int main(void) {
 
 /* ================= subfunctions =================== */
 void intro(void) {
-	printf("DUNE 1.5\n");		
-	Sleep(2000);
+	printf("DUNE 1.5\n");
+	printf("..............................\n");
+	printf(".DDDDD              1   5555 .\n");
+	printf(".D     D           11   5    .\n");
+	printf(".D     D            1   5555 .\n");
+	printf(".D     D            1      5 .\n");
+	printf(".D     D            1 . 5555 .\n");
+	printf(".D     D                     .\n");
+	printf(".D     D  U   U  Nnnn    eee .\n");
+	printf(".D     D  U   U  N   n  e   e.\n");
+	printf(".D     D  U   U  N   n  eeeee.\n");
+	printf(".D     D  U   U  N   n  e    .\n");
+	printf(".DDDDD     UUUU  N   n   eee .\n");
+	printf("..............................\n");
+	Sleep(1500);
 	system("cls");
 }
 
 void outro(void) {
+	set_color(COLOR_DEFAULT);
 	system("cls");
 	printf("exiting...\n");
+	printf("exiting......\n");
+	printf("exiting............\n");
+	printf("exiting.....................\n");
+	printf("exiting..............................\n");
 	exit(0);
 }
 
@@ -321,23 +341,52 @@ void init(void) {
 		}
 	}
 
-	// 시스템 메시지 창
-	for (int j = 0; j < SYS_MAP_WIDTH; j++) {
-		sys_array[0][j] = '#';  // 첫 번째 행 (상단 경계)
-		sys_array[SYS_MAP_HEIGHT - 1][j] = '#';  // 마지막 행 (하단 경계)
+	// 상태창
+	for (int j = 0; j < STATUS_MAP_WIDTH; j++) {
+		status_array[0][j] = '#';  // 첫 번째 행 (상단 경계)
+		status_array[STATUS_MAP_HEIGHT - 1][j] = '#';  // 마지막 행 (하단 경계)
 	}
 
 	// 좌측과 우측 경계
-	for (int i = 1; i < SYS_MAP_HEIGHT - 1; i++) {
-		sys_array[i][0] = '#';  // 첫 번째 열 (좌측 경계)
-		sys_array[i][SYS_MAP_WIDTH - 1] = '#';  // 마지막 열 (우측 경계)
+	for (int i = 1; i < STATUS_MAP_HEIGHT - 1; i++) {
+		status_array[i][0] = '#';  // 첫 번째 열 (좌측 경계)
+		status_array[i][STATUS_MAP_WIDTH - 1] = '#';  // 마지막 열 (우측 경계)
 
 		// 내부는 공백으로 채우기
-		for (int j = 1; j < SYS_MAP_WIDTH - 1; j++) {
-			sys_array[i][j] = ' ';  // 내부 부분
+		for (int j = 1; j < STATUS_MAP_WIDTH - 1; j++) {
+			status_array[i][j] = ' ';  // 내부 부분
 		}
 	}
 
+	// 시스템 메시지 창
+	for (int j = 0; j < SYS_MAP_WIDTH; j++) {
+		sys_array[0][j] = '#';
+		sys_array[SYS_MAP_HEIGHT - 1][j] = '#';
+	}
+
+	for (int i = 1; i < SYS_MAP_HEIGHT - 1; i++) {
+		sys_array[i][0] = '#';
+		sys_array[i][SYS_MAP_WIDTH - 1] = '#';
+		
+		for (int j = 1; j < SYS_MAP_WIDTH - 1; j++) {
+			sys_array[i][j];
+		}
+	}
+
+	// 명령어 창
+	for (int j = 0; j < COMMAND_MAP_WIDTH; j++) {
+		command_array[0][j] = '#';
+		command_array[COMMAND_MAP_HEIGHT - 1][j] = '#';
+	}
+
+	for (int i = 1; i < COMMAND_MAP_HEIGHT - 1; i++) {
+		command_array[i][0] = '#';
+		command_array[i][COMMAND_MAP_WIDTH - 1] = '#';
+
+		for (int j = 1; j < COMMAND_MAP_WIDTH - 1; j++) {
+			command_array[i][j];
+		}
+	}
 	// object sample
 	map[1][obj.pos.row][obj.pos.column] = 'o';
 }
@@ -374,50 +423,50 @@ void press_space(POSITION pos) {
 
 	if (repr == 'B') {
 		if (pos.column <= mid_column) {
-			clear_sys_message();
+			clear_status();
 			gotoxy(prt);
 			printf("아트레이데스 본진...");
 		}
 		else {
-			clear_sys_message();
+			clear_status();
 			gotoxy(prt);
 			printf("하코넨 본진...");
 		}
 	}
 	else if (repr2 == 'H') {
 		if (pos.column <= mid_column) {
-			clear_sys_message();
+			clear_status();
 			gotoxy(prt);
 			printf("아트레이데스 하베스터...");
 		}
 		else {
-			clear_sys_message();
+			clear_status();
 			gotoxy(prt);
 			printf("하코넨 하베스터...");
 		}
 	}
 	else if (repr == 'R') {
-		clear_sys_message();
+		clear_status();
 		gotoxy(prt);
 		printf("바위...");
 	}
 	else if (repr == 'S') {
-		clear_sys_message();
+		clear_status();
 		gotoxy(prt);
 		printf("스파이스...");
 	}
 	else if (repr == 'P') {
-		clear_sys_message();
+		clear_status();
 		gotoxy(prt);
 		printf("장판...");
 	}
 	else if (repr2 == 'W') {
-		clear_sys_message();
+		clear_status();
 		gotoxy(prt);
 		printf("샌드웜...");
 	}
 	else if (repr == ' ') {
-		clear_sys_message();
+		clear_status();
 		gotoxy(prt);
 		printf("사막 지형...");
 	}
@@ -425,7 +474,7 @@ void press_space(POSITION pos) {
 
 // esc눌렀을 때
 void press_esc(void) {
-	clear_sys_message();
+	clear_status();
 }
 
 

@@ -14,29 +14,36 @@ const POSITION map_pos = { 1, 0 };
 
 char backbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
 char frontbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
-char back[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
-char front[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
+char status_back[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH] = { 0 };
+char status_front[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH] = { 0 };
+char sys_back[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
+char sys_front[SYS_MAP_HEIGHT][SYS_MAP_WIDTH] = { 0 };
+char command_back[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH] = { 0 };
+char command_front[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH] = { 0 };
 
 void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP_WIDTH]);
 void display_resource(RESOURCE resource);
 void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]);
 void display_cursor(CURSOR cursor);
-void display_sys_message(sys_array);
+void display_status(status_array);
+void display_sys(sys_array);
+void display_command(command_array);
 
 
 void display(
 	RESOURCE resource,
-	char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH], 
+	char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH],
 	CURSOR cursor,
-	char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH])
+	char status_array[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH],
+	char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH],
+	char command_array[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH])
 {
 	display_resource(resource);
 	display_map(map);
 	display_cursor(cursor);
-	display_sys_message(sys_array);
-	// display_object_info()
-	// display_commands()
-	// ...
+	display_status(status_array);
+	display_sys(sys_array);
+	display_command(command_array);
 }
 
 void display_resource(RESOURCE resource) {
@@ -133,7 +140,41 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 	}
 }
 
-void project_sys_message(char src[SYS_MAP_HEIGHT][SYS_MAP_WIDTH], char dest[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
+void project_status(char src[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH], char dest[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH]) {
+	for (int i = 0; i < STATUS_MAP_HEIGHT; i++) {
+		for (int j = 0; j < STATUS_MAP_WIDTH; j++) {
+			dest[i][j] = src[i][j];
+		}
+	}
+}
+
+void display_status(char status_array[STATUS_MAP_HEIGHT][STATUS_MAP_WIDTH]) {
+	project_status(status_array, status_back);
+
+	for (int i = 0; i < STATUS_MAP_HEIGHT; i++) {
+		for (int j = 0; j < STATUS_MAP_WIDTH; j++) {
+			if (status_front[i][j] != status_back[i][j]) {
+				POSITION pos = { 1 + i, MAP_WIDTH + 1 + j };
+				printc(pos, status_back[i][j], COLOR_DEFAULT);
+			}
+			status_front[i][j] = status_back[i][j];
+		}
+	}
+}
+
+void clear_status(void) {
+	POSITION position;
+	for (int i = 2; i < STATUS_MAP_HEIGHT - 2; i++) {
+		for (int j = 2; j < STATUS_MAP_WIDTH - 2; j++) {
+			position.row = i;
+			position.column = MAP_WIDTH + j;
+			gotoxy(position);
+			printf(" ");
+		}
+	}
+}
+
+void project_sys(char src[SYS_MAP_HEIGHT][SYS_MAP_WIDTH], char dest[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
 	for (int i = 0; i < SYS_MAP_HEIGHT; i++) {
 		for (int j = 0; j < SYS_MAP_WIDTH; j++) {
 			dest[i][j] = src[i][j];
@@ -141,16 +182,38 @@ void project_sys_message(char src[SYS_MAP_HEIGHT][SYS_MAP_WIDTH], char dest[SYS_
 	}
 }
 
-void display_sys_message(char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
-	project_sys_message(sys_array, back);
+void display_sys(char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
+	project_sys(sys_array, sys_back);
 
 	for (int i = 0; i < SYS_MAP_HEIGHT; i++) {
 		for (int j = 0; j < SYS_MAP_WIDTH; j++) {
-			if (front[i][j] != back[i][j]) {
-				POSITION pos = { 1 + i, MAP_WIDTH + 1 + j };
-				printc(pos, back[i][j], COLOR_DEFAULT);
+			if (sys_front[i][j] != sys_back[i][j]) {
+				POSITION pos = { 2 + MAP_HEIGHT + i, j };
+				printc(pos, sys_back[i][j], COLOR_DEFAULT);
 			}
-			front[i][j] = back[i][j];
+			sys_front[i][j] = sys_back[i][j];
+		}
+	}
+}
+
+void project_command(char src[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH], char dest[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH]) {
+	for (int i = 0; i < COMMAND_MAP_HEIGHT; i++) {
+		for (int j = 0; j < COMMAND_MAP_WIDTH; j++) {
+			dest[i][j] = src[i][j];
+		}
+	}
+}
+
+void display_command(char command_array[COMMAND_MAP_HEIGHT][COMMAND_MAP_WIDTH]) {
+	project_command(command_array, command_back);
+
+	for (int i = 0; i < COMMAND_MAP_HEIGHT; i++) {
+		for (int j = 0; j < COMMAND_MAP_WIDTH; j++) {
+			if (command_front[i][j] != command_back[i][j]) {
+				POSITION pos = { 2 + MAP_HEIGHT + i, MAP_WIDTH + 1 + j };
+				printc(pos, command_back[i][j], COLOR_DEFAULT);
+			}
+			command_front[i][j] = command_back[i][j];
 		}
 	}
 }
@@ -163,10 +226,10 @@ int get_color_for_char(char ch, POSITION cursor_pos) {
 	
 	if (ch == 'H') {
 		if (cursor_pos.column <= mid_column) {
-			return 23;
+			return COLOR_Atreides;
 		}
 		else {
-			return 79;
+			return COLOR_Harkonnen;
 		}
 	}
 	
@@ -174,33 +237,22 @@ int get_color_for_char(char ch, POSITION cursor_pos) {
 	if (ch == 'B') {
 		if (cursor_pos.column <= mid_column) {
 			// 왼쪽 반에서 색상 79 (예: Atreides Base)
-			return 23;  // 파란색 배경, 흰색 글자 (또는 원하는 색)
+			return COLOR_Atreides;  // 파란색 배경, 흰색 글자 (또는 원하는 색)
 		}
 		else {
 			// 오른쪽 반에서 색상 23 (예: Harkonnen Base)
-			return 79;  // 빨간색 배경, 흰색 글자 (또는 원하는 색)
+			return COLOR_Harkonnen;  // 빨간색 배경, 흰색 글자 (또는 원하는 색)
 		}
 	}
 
 	// 나머지 문자에 대한 색상 설정
 	switch (ch) {
-	case 'P': return 7;    // Plate
-	case 'S': return 71;   // Spice Field
-	case 'R': return 135;  // Rock
-	case 'W': return 103;  // Sand Worm
+	case 'P': return COLOR_P;    // Plate
+	case 'S': return COLOR_SPICE;   // Spice Field
+	case 'R': return COLOR_ROCK;  // Rock
+	case 'W': return COLOR_WORM;  // Sand Worm
 	case ' ': return COLOR_DEFAULT + 220;  // 빈 공간
 	default: return COLOR_DEFAULT;  // 기타 문자
 	}
 }
 
-void clear_sys_message(void) {
-	POSITION position;
-	for (int i = 2; i < SYS_MAP_HEIGHT - 2; i++) {
-		for (int j = 2; j < SYS_MAP_WIDTH - 2; j++) {
-			position.row = i;
-			position.column = MAP_WIDTH + j;
-			gotoxy(position);
-			printf(" ");
-		}
-	}
-}
