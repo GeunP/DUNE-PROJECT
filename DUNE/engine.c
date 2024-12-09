@@ -135,7 +135,7 @@ OBJECT_CON sand_warms = {
 //아트레이데스 정보
 void Atreides_info(void) {
 	POSITION pos;
-	pos.row = 2;
+	pos.row = 3;
 	pos.column = MAP_WIDTH + 4;
 	gotoxy(pos);
 	printf("[ 정보 ]");
@@ -148,14 +148,11 @@ void Atreides_info(void) {
 	pos.row += 1;
 	gotoxy(pos);
 	printf("내구도 : 50");
-	pos.row += 1;
-	gotoxy(pos);
-	printf("명령어 : H:하베스터 생산");
 }
 //하코넨 정보
 void Harkonnen_info(void) {
 	POSITION pos;
-	pos.row = 2;
+	pos.row = 3;
 	pos.column = MAP_WIDTH + 4;
 	gotoxy(pos);
 	printf("[ 정보 ]");
@@ -168,9 +165,26 @@ void Harkonnen_info(void) {
 	pos.row += 1;
 	gotoxy(pos);
 	printf("내구도 : 50");
+}
+//장판 정보
+void Plate_info(void) {
+	POSITION pos;
+	pos.row = 3;
+	pos.column = MAP_WIDTH + 4;
+	gotoxy(pos);
+	printf("[ 정보 ]");
 	pos.row += 1;
 	gotoxy(pos);
-	printf("명령어 : H:하베스터 생산");
+	printf("장판(P:plate)");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("설명 : 건물 짓기 전에 깔기");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("건설 비용 : 1");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("내구도 : 없음");
 }
 
 void Construction(void) {
@@ -406,17 +420,16 @@ void cursor_move(DIRECTION dir) {
 
         // 이전 위치 복원
         char original_char = map[0][cursor.previous.row][cursor.previous.column];
-		char original_char2 = map[1][cursor.previous.row][cursor.previous.column];
         int color = get_color_for_char(original_char, cursor.previous); // 문자에 맞는 색상 가져오기
-		int color2 = get_color_for_char(original_char2, cursor.previous);
 		printc(padd(map_pos, cursor.previous), original_char, color);
-		printc(padd(map_pos, cursor.previous), original_char2, color2);
+		
     }
 }
 
 // 스페이스바를 눌렀을 때
 void press_space(POSITION pos) {
-	POSITION prt = { 3, 64 };
+	POSITION prt = { 3, MAP_WIDTH + 4 };
+	POSITION com = { MAP_HEIGHT + 4, MAP_WIDTH + 4 };
 	char repr = map[0][pos.row][pos.column];
 	char repr2 = map[1][pos.row][pos.column];
 	int mid_column = MAP_WIDTH / 2;
@@ -424,13 +437,15 @@ void press_space(POSITION pos) {
 	if (repr == 'B') {
 		if (pos.column <= mid_column) {
 			clear_status();
-			gotoxy(prt);
-			printf("아트레이데스 본진...");
+			Atreides_info();
+			gotoxy(com);
+			printf("H : 하베스터 생산");
 		}
 		else {
 			clear_status();
-			gotoxy(prt);
-			printf("하코넨 본진...");
+			Harkonnen_info();
+			gotoxy(com);
+			printf("H : 하베스터 생산");
 		}
 	}
 	else if (repr2 == 'H') {
@@ -457,8 +472,7 @@ void press_space(POSITION pos) {
 	}
 	else if (repr == 'P') {
 		clear_status();
-		gotoxy(prt);
-		printf("장판...");
+		Plate_info();
 	}
 	else if (repr2 == 'W') {
 		clear_status();
@@ -475,6 +489,7 @@ void press_space(POSITION pos) {
 // esc눌렀을 때
 void press_esc(void) {
 	clear_status();
+	clear_command();
 }
 
 

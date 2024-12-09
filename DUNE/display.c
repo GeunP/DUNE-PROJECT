@@ -99,36 +99,36 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 				else if (backbuf[i][j] == 'B') {
 					POSITION pos = { i, j };
 					if (j <= MAP_WIDTH / 2) {
-						printc(padd(map_pos, pos), backbuf[i][j], 23);
+						printc(padd(map_pos, pos), backbuf[i][j], COLOR_Atreides);
 					}
 					else {
-						printc(padd(map_pos, pos), backbuf[i][j], 79);
+						printc(padd(map_pos, pos), backbuf[i][j], COLOR_Harkonnen);
 					}
 				}
 				else if (backbuf[i][j] == 'H') {
 					POSITION pos = { i, j };
 					if (j <= MAP_WIDTH / 2) {
-						printc(padd(map_pos, pos), backbuf[i][j], 23);
+						printc(padd(map_pos, pos), backbuf[i][j], COLOR_Atreides);
 					}
 					else {
-						printc(padd(map_pos, pos), backbuf[i][j], 79);
+						printc(padd(map_pos, pos), backbuf[i][j], COLOR_Harkonnen);
 					}
 				}
 				else if (backbuf[i][j] == 'P') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 7);
+					printc(padd(map_pos, pos), backbuf[i][j], COLOR_P);
 				}
 				else if (backbuf[i][j] == 'S') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 71);
+					printc(padd(map_pos, pos), backbuf[i][j], COLOR_SPICE);
 				}
 				else if (backbuf[i][j] == 'R') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 135);
+					printc(padd(map_pos, pos), backbuf[i][j], COLOR_ROCK);
 				}
 				else if (backbuf[i][j] == 'W') {
 					POSITION pos = { i, j };
-					printc(padd(map_pos, pos), backbuf[i][j], 103);
+					printc(padd(map_pos, pos), backbuf[i][j], COLOR_WORM);
 				}
 				else {
 					POSITION pos = { i, j };
@@ -167,6 +167,18 @@ void clear_status(void) {
 	for (int i = 2; i < STATUS_MAP_HEIGHT - 2; i++) {
 		for (int j = 2; j < STATUS_MAP_WIDTH - 2; j++) {
 			position.row = i;
+			position.column = MAP_WIDTH + j;
+			gotoxy(position);
+			printf(" ");
+		}
+	}
+}
+
+void clear_command(void) {
+	POSITION position;
+	for (int i = 2; i < COMMAND_MAP_HEIGHT - 2; i++) {
+		for (int j = 2; j < COMMAND_MAP_WIDTH - 2; j++) {
+			position.row = MAP_HEIGHT + 1 + i;
 			position.column = MAP_WIDTH + j;
 			gotoxy(position);
 			printf(" ");
