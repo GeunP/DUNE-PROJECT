@@ -10,9 +10,10 @@ void intro(void);
 void outro(void);
 void cursor_move(DIRECTION dir);
 void sample_obj_move(void);
+void press_space(POSITION pos);
+void press_esc(void);
 POSITION sample_obj_next_position(void);
 POSITION current_space_pos = { 0, 0 };
-void press_space(POSITION pos);
 
 DWORD getMilliseconds(SYSTEMTIME time) {
 	return (DWORD)(time.wSecond * 1000 + time.wMilliseconds);
@@ -94,7 +95,7 @@ OBJECT_CON spice = {
 	.pos1 = {MAP_HEIGHT - 8, MAP_WIDTH - (MAP_WIDTH - 1)},
 	.pos2 = {MAP_HEIGHT - (MAP_HEIGHT - 8), MAP_WIDTH - 2},
 	.layer = 0,
-	.repr = '5'
+	.repr = 'S'
 };
 
 OBJECT_CON small_rock = {
@@ -129,7 +130,46 @@ OBJECT_CON sand_warms = {
 	.layer = 1,
 	.repr = 'W'
 };
-
+//아트레이데스 정보
+void Atreides_info(void) {
+	POSITION pos;
+	pos.row = 2;
+	pos.column = MAP_WIDTH + 4;
+	gotoxy(pos);
+	printf("[ 정보 ]");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("아트레이데스 본진");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("건설 비용 : 없음");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("내구도 : 50");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("명령어 : H:하베스터 생산");
+}
+//하코넨 정보
+void Harkonnen_info(void) {
+	POSITION pos;
+	pos.row = 2;
+	pos.column = MAP_WIDTH + 4;
+	gotoxy(pos);
+	printf("[ 정보 ]");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("하코넨 본진");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("건설 비용 : 없음");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("내구도 : 50");
+	pos.row += 1;
+	gotoxy(pos);
+	printf("명령어 : H:하베스터 생산");
+}
 
 void Construction(void) {
 	//아트레이데스 베이스
@@ -226,6 +266,9 @@ int main(void) {
 				current_space_pos = cursor.current;
 				press_space(current_space_pos);
 				break;
+			case k_esc: 
+				press_esc();
+				break;
 			case k_quit: outro();
 			case k_none:
 			case k_undef:
@@ -316,6 +359,31 @@ void cursor_move(DIRECTION dir) {
         int color = get_color_for_char(original_char, cursor.previous);  // 문자에 맞는 색상 가져오기
         printc(padd(map_pos, cursor.previous), original_char, color);
     }
+}
+
+// 스페이스바를 눌렀을 때
+void press_space(POSITION pos) {
+	char repr = map[0][pos.row][pos.column];
+	int mid_column = MAP_WIDTH / 2;
+
+	if (repr == 'B') {
+		if (pos.column <= mid_column) {
+			Atreides_info();
+		}
+		else {
+			Harkonnen_info();
+		}
+	}
+	else if (repr == ' ') {
+		POSITION prt = { 3, 64 };
+		gotoxy(prt);
+		printf("사막 지형");
+	}
+}
+
+// esc눌렀을 때
+void press_esc(void) {
+	clear_sys_message();
 }
 
 

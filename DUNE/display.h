@@ -12,7 +12,7 @@
 
 // 표시할 색상 정의. 대충 맞춰 뒀는데, 취향껏 추가하거나 변경하기
 #define COLOR_DEFAULT	15
-#define COLOR_CURSOR	235
+#define COLOR_CURSOR	15
 #define COLOR_RESOURCE  112
 
 // 지금은 자원, 맵, 커서만 표시
@@ -25,6 +25,6 @@ void display(
 );
 
 int get_color_for_char(char ch, POSITION cursor_pos);  // 문자에 따른 색상 반환 함수 선언
-
+void clear_sys_message();
 
 #endif

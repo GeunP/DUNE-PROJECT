@@ -111,7 +111,7 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 					POSITION pos = { i, j };
 					printc(padd(map_pos, pos), backbuf[i][j], 7);
 				}
-				else if (backbuf[i][j] == '5') {
+				else if (backbuf[i][j] == 'S') {
 					POSITION pos = { i, j };
 					printc(padd(map_pos, pos), backbuf[i][j], 71);
 				}
@@ -147,7 +147,7 @@ void display_sys_message(char sys_array[SYS_MAP_HEIGHT][SYS_MAP_WIDTH]) {
 	for (int i = 0; i < SYS_MAP_HEIGHT; i++) {
 		for (int j = 0; j < SYS_MAP_WIDTH; j++) {
 			if (front[i][j] != back[i][j]) {
-				POSITION pos = { 1 + i, 61 + j };
+				POSITION pos = { 1 + i, MAP_WIDTH + 1 + j };
 				printc(pos, back[i][j], COLOR_DEFAULT);
 			}
 			front[i][j] = back[i][j];
@@ -174,11 +174,22 @@ int get_color_for_char(char ch, POSITION cursor_pos) {
 	// 나머지 문자에 대한 색상 설정
 	switch (ch) {
 	case 'P': return 7;    // Plate
-	case '5': return 71;   // Spice Field
+	case 'S': return 71;   // Spice Field
 	case 'R': return 135;  // Rock
 	case 'W': return 103;  // Sand Worm
 	case ' ': return COLOR_DEFAULT + 220;  // 빈 공간
 	default: return COLOR_DEFAULT;  // 기타 문자
 	}
 }
-
+	
+void clear_sys_message(void) {
+	POSITION position;
+	for (int i = 2; i < SYS_MAP_HEIGHT - 2; i++) {
+		for (int j = 2; j < SYS_MAP_WIDTH - 2; j++) {
+			position.row = i;
+			position.column = MAP_WIDTH + j;
+			gotoxy(position);
+			printf(" ");
+		}
+	}
+}
