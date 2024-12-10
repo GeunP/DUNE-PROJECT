@@ -118,7 +118,7 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 					POSITION pos = { i, j };
 					printc(padd(map_pos, pos), backbuf[i][j], COLOR_P);
 				}
-				else if (backbuf[i][j] == 'S') {
+				else if (backbuf[i][j] == '5') {
 					POSITION pos = { i, j };
 					printc(padd(map_pos, pos), backbuf[i][j], COLOR_SPICE);
 				}
@@ -260,7 +260,7 @@ int get_color_for_char(char ch, POSITION cursor_pos) {
 	// 나머지 문자에 대한 색상 설정
 	switch (ch) {
 	case 'P': return COLOR_P;    // Plate
-	case 'S': return COLOR_SPICE;   // Spice Field
+	case '5': return COLOR_SPICE;   // Spice Field
 	case 'R': return COLOR_ROCK;  // Rock
 	case 'W': return COLOR_WORM;  // Sand Worm
 	case ' ': return COLOR_DEFAULT + 220;  // 빈 공간

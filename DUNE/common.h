@@ -108,6 +108,16 @@ typedef struct {
 	int next_move_time;	// 다음에 움직일 시간
 } OBJECT_SAMPLE;
 
+// 샌드웜 움직이게 하는코드
+typedef struct {
+	POSITION  pos;
+	POSITION dest;
+	int layeer;
+	char repr;
+	int move_period;
+	int next_move_time;
+} SAND_WARM;
+
 extern const POSITION map_pos;  // 맵의 기준 위치 선언
 
 
