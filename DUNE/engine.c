@@ -283,7 +283,8 @@ int main(void) {
 			if (PreKey != 0 && PreKey == key) {
 				time_gap = getMilliseconds(tVal2) - getMilliseconds(tVal1);	// 방향키가 눌린 시간 차 구하기
 				if (time_gap < DOUBLE_CLICK_GAP) {
-					for (int i = 0; i < 3; i++) {
+					for (int i = 0; i < 3; i++) {	
+						display_cursor(cursor);
 						cursor_move(ktod(key));
 					}
 				}
@@ -577,12 +578,16 @@ void sample_obj_move(void) {
 	obj.next_move_time = sys_clock + obj.move_period;
 }
 
-// 샌드웜 움직이는 코드
-void sand_warm_move(void) {
-	if (sys_clock <= sand_warm1.next_move_time) {
-		return;
-	}
-
-
-}
+// 샌드웜1 움직이는 코드
+//void sand_warm_move(void) {
+//	if (sys_clock <= sand_warm1.next_move_time) {
+//		return;
+//	}
+//
+//	map[1][sand_warm1.pos.row][obj.pos.column] = -1;
+//	sand_warm1.pos = sand_warm1_next_position();
+//	map[1][sand_warm1.pos.row][sand_warm1.pos.column] = sand_warm1.repr;
+//
+//	sand_warm1.next_move_time = sys_clock + sand_warm1.move_period;
+//}
 
