@@ -45,21 +45,6 @@ OBJECT_SAMPLE obj = {
 	.move_period = 300,
 	.next_move_time = 300
 };
-OBJECT_SAMPLE sand_warm1 = {
-	.pos = {MAP_HEIGHT - (MAP_HEIGHT - 3), MAP_WIDTH - (MAP_WIDTH - 11)},
-	.dest = {MAP_HEIGHT - 2, MAP_WIDTH - 2},
-	.repr = 'W',
-	.move_period = 1500,
-	.next_move_time = 1500
-};
-
-OBJECT_SAMPLE sand_warm2 = {
-	.pos = {MAP_HEIGHT - 8, MAP_WIDTH - (MAP_WIDTH - 39)},
-	.dest = {MAP_HEIGHT - 2, MAP_WIDTH - 2},
-	.repr = 'W',
-	.move_period = 1500,
-	.next_move_time = 1500
-};
 
 OBJECT_CON sand_warms = {
 	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 3), MAP_WIDTH - (MAP_WIDTH - 11)},
@@ -579,55 +564,5 @@ void sample_obj_move(void) {
 	obj.next_move_time = sys_clock + obj.move_period;
 }
 
-POSITION sand_warm1_next_position(void) {
-	// 현재 위치와 목적지를 비교해서 이동 방향 결정
-	POSITION diff = psub(H_Harvester.pos1, obj.pos); // 목적지를 H_Harvester.pos1로 대체
-	DIRECTION dir;
 
-	// 목적지 도착. 지금은 단순히 원래 자리로 왕복
-	if (diff.row == 0 && diff.column == 0) {
-		if (H_Harvester.pos1.row == 1 && H_Harvester.pos1.column == 1) {
-			// topleft --> bottomright로 목적지 설정
-			H_Harvester.pos1 = (POSITION){ MAP_HEIGHT - 2, MAP_WIDTH - 2 };
-		}
-		else {
-			// bottomright --> topleft로 목적지 설정
-			H_Harvester.pos1 = (POSITION){ 1, 1 };
-		}
-		return obj.pos;
-	}
-
-	// 가로축, 세로축 거리를 비교해서 더 먼 쪽 축으로 이동
-	if (abs(diff.row) >= abs(diff.column)) {
-		dir = (diff.row >= 0) ? d_down : d_up;
-	}
-	else {
-		dir = (diff.column >= 0) ? d_right : d_left;
-	}
-
-	// validation check
-	POSITION next_pos = pmove(obj.pos, dir);
-	if (1 <= next_pos.row && next_pos.row <= MAP_HEIGHT - 2 && \
-		1 <= next_pos.column && next_pos.column <= MAP_WIDTH - 2 && \
-		map[1][next_pos.row][next_pos.column] < 0) {
-
-		return next_pos;
-	}
-	else {
-		return obj.pos;  // 제자리
-	}
-}
-
- //샌드웜1 움직이는 코드
-void sand_warm1_move(void) {
-	if (sys_clock <= sand_warm1.next_move_time) {
-		return;
-	}
-
-	map[1][sand_warm1.pos.row][obj.pos.column] = -1;
-	sand_warm1.pos = sand_warm1_next_position();
-	map[1][sand_warm1.pos.row][sand_warm1.pos.column] = sand_warm1.repr;
-
-	sand_warm1.next_move_time = sys_clock + sand_warm1.move_period;
-}
 
