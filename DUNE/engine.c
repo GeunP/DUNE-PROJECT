@@ -12,9 +12,10 @@ void cursor_move(DIRECTION dir);
 void sample_obj_move(void);
 void press_space(POSITION pos);
 void press_esc(void);
+void press_H(POSITION pos);
 POSITION sample_obj_next_position(void);
-POSITION sand_warm1_next_position(void);
 POSITION current_space_pos = { 0, 0 };
+POSITION current_H_pos = { 0,0 };
 
 DWORD getMilliseconds(SYSTEMTIME time) {
 	return (DWORD)(time.wSecond * 1000 + time.wMilliseconds);
@@ -288,6 +289,10 @@ int main(void) {
 			case k_esc: 
 				press_esc();
 				break;
+			case k_H:
+				current_H_pos = cursor.current;
+				press_H(current_H_pos);
+				break;
 			case k_quit: outro();
 			case k_none:
 			case k_undef:
@@ -505,7 +510,23 @@ void press_esc(void) {
 	clear_command();
 }
 
+void press_H(POSITION pos) {
+	POSITION Atre = { MAP_HEIGHT - 3, MAP_WIDTH - (MAP_WIDTH - 2) };
+	POSITION Hark = { MAP_HEIGHT - (MAP_HEIGHT - 4), MAP_WIDTH - 3 };
+	char repr = map[0][pos.row][pos.column];
+	int mid_column = MAP_WIDTH / 2;
 
+	if (repr == 'B') {
+		if (pos.column <= mid_column) {
+			gotoxy(Atre);
+			printf("H");
+		}
+		else {
+			gotoxy(Hark);
+			printf("H");
+		}
+	}
+}
 /* ================= sample object movement =================== */
 POSITION sample_obj_next_position(void) {
 	// 현재 위치와 목적지를 비교해서 이동 방향 결정	
