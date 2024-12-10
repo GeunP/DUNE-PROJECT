@@ -437,12 +437,14 @@ void press_space(POSITION pos) {
 	if (repr == 'B') {
 		if (pos.column <= mid_column) {
 			clear_status();
+			clear_command();
 			Atreides_info();
 			gotoxy(com);
 			printf("H : 하베스터 생산");
 		}
 		else {
 			clear_status();
+			clear_command();
 			Harkonnen_info();
 			gotoxy(com);
 			printf("H : 하베스터 생산");
@@ -451,36 +453,43 @@ void press_space(POSITION pos) {
 	else if (repr2 == 'H') {
 		if (pos.column <= mid_column) {
 			clear_status();
+			clear_command();
 			gotoxy(prt);
 			printf("아트레이데스 하베스터...");
 		}
 		else {
 			clear_status();
+			clear_command();
 			gotoxy(prt);
 			printf("하코넨 하베스터...");
 		}
 	}
 	else if (repr == 'R') {
 		clear_status();
+		clear_command();
 		gotoxy(prt);
 		printf("바위...");
 	}
 	else if (repr == 'S') {
 		clear_status();
+		clear_command();
 		gotoxy(prt);
 		printf("스파이스...");
 	}
 	else if (repr == 'P') {
 		clear_status();
+		clear_command();
 		Plate_info();
 	}
 	else if (repr2 == 'W') {
 		clear_status();
+		clear_command();
 		gotoxy(prt);
 		printf("샌드웜...");
 	}
 	else if (repr == ' ') {
 		clear_status();
+		clear_command();
 		gotoxy(prt);
 		printf("사막 지형...");
 	}
@@ -491,6 +500,7 @@ void press_esc(void) {
 	clear_status();
 	clear_command();
 }
+
 
 
 /* ================= sample object movement =================== */
