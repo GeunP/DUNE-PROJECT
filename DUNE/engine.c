@@ -44,6 +44,28 @@ OBJECT_SAMPLE obj = {
 	.move_period = 300,
 	.next_move_time = 300
 };
+OBJECT_SAMPLE sand_warm1 = {
+	.pos = {MAP_HEIGHT - (MAP_HEIGHT - 3), MAP_WIDTH - (MAP_WIDTH - 11)},
+	.dest = {MAP_HEIGHT - 2, MAP_WIDTH - 2},
+	.repr = 'W',
+	.move_period = 1500,
+	.next_move_time = 1500
+};
+
+OBJECT_SAMPLE sand_warm2 = {
+	.pos = {MAP_HEIGHT - 8, MAP_WIDTH - (MAP_WIDTH - 39)},
+	.dest = {MAP_HEIGHT - 2, MAP_WIDTH - 2},
+	.repr = 'W',
+	.move_period = 1500,
+	.next_move_time = 1500
+};
+
+OBJECT_CON sand_warms = {
+	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 3), MAP_WIDTH - (MAP_WIDTH - 11)},
+	.pos2 = {MAP_HEIGHT - 8, MAP_WIDTH - (MAP_WIDTH - 39)},
+	.layer = 1,
+	.repr = 'W'
+};
 
 OBJECT_CON Atreides_base = {
 	.pos1 = {MAP_HEIGHT - 3, MAP_WIDTH - (MAP_WIDTH - 1)},
@@ -126,12 +148,6 @@ OBJECT_CON big_rock2 = {
 	.repr = 'R'
 };
 
-OBJECT_CON sand_warms = {
-	.pos1 = {MAP_HEIGHT - (MAP_HEIGHT - 3), MAP_WIDTH - (MAP_WIDTH - 11)},
-	.pos2 = {MAP_HEIGHT - 8, MAP_WIDTH - (MAP_WIDTH - 39)},
-	.layer = 1,
-	.repr = 'W'
-};
 //아트레이데스 정보
 void Atreides_info(void) {
 	POSITION pos;
@@ -490,6 +506,7 @@ void press_space(POSITION pos) {
 	else if (repr == ' ') {
 		clear_status();
 		clear_command();
+		sys_message_clear();
 		gotoxy(prt);
 		printf("사막 지형...");
 	}
@@ -500,7 +517,6 @@ void press_esc(void) {
 	clear_status();
 	clear_command();
 }
-
 
 
 /* ================= sample object movement =================== */
@@ -561,4 +577,12 @@ void sample_obj_move(void) {
 	obj.next_move_time = sys_clock + obj.move_period;
 }
 
+// 샌드웜 움직이는 코드
+void sand_warm_move(void) {
+	if (sys_clock <= sand_warm1.next_move_time) {
+		return;
+	}
+
+
+}
 

@@ -34,5 +34,7 @@ void display(
 
 int get_color_for_char(char ch, POSITION cursor_pos);  // 문자에 따른 색상 반환 함수 선언
 void clear_status();
+void clear_command();
+void sys_message_clear();
 
 #endif

@@ -268,3 +268,8 @@ int get_color_for_char(char ch, POSITION cursor_pos) {
 	}
 }
 
+// 시스템 메시지 창에 줄 가장 최근껀 맨 아래 오래된것은 지우는 코드
+void sys_message_clear(void) {
+	POSITION pos = { MAP_HEIGHT + 4, 2 };
+	
+}
